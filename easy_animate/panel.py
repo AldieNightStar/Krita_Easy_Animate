@@ -1,6 +1,6 @@
 from krita import *
 from .plugin import pluginInstance
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton
+from PyQt5.QtWidgets import *
 
 K = Krita.instance()
 
@@ -25,9 +25,9 @@ class AnimationHelperDocker(DockWidget):
         self._button(hbox1, "📚", pluginInstance.copy_frames)
         self._button(hbox1, "📋", pluginInstance.paste_frames)
 
-        self._button(hbox2, "📈const", pluginInstance.create_interpol('interpolation_constant'))
-        self._button(hbox2, "📈lin", pluginInstance.create_interpol('interpolation_linear'))
-        self._button(hbox2, "📈bez", pluginInstance.create_interpol('interpolation_bezier'))
+        self._button(hbox2, "📈const", pluginInstance.create_trans_interpol('interpolation_constant'))
+        self._button(hbox2, "📈lin", pluginInstance.create_trans_interpol('interpolation_linear'))
+        self._button(hbox2, "📈bez", pluginInstance.create_trans_interpol('interpolation_bezier'))
 
         vbox.addLayout(hbox1)
         vbox.addLayout(hbox2)

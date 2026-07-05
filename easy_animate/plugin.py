@@ -1,5 +1,7 @@
 from krita import Extension, Krita
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 K = Krita.instance()
 
@@ -54,9 +56,10 @@ class EasyAnimatePlugin(Extension):
         doc = K.activeDocument()
         K.action('paste_frames').trigger()
 
-    def create_interpol(self, name):
+    def create_trans_interpol(self, name):
         def _method():
             doc = K.activeDocument()
+            self._select_current_curves()
             K.action(name).trigger()
             doc.refreshProjection()
         return _method
@@ -91,6 +94,37 @@ class EasyAnimatePlugin(Extension):
 
     def _newAction(self, win, name, desc, act):
         action = win.createAction(name, desc, "tools/scripts")
+
+    def _get_anim_docker(self):
+        for docker in K.dockers():
+            name = docker.objectName().lower()
+            if "animation" in name and "docker" in name:
+                docker.setVisible(True)
+                return docker
+        raise IndexError("Can't find any Animation Docker")
+    
+    def _select_current_curves(self):
+        curves_docker = self._get_anim_docker()
+        current_frame = K.activeDocument().currentTime()
+        view = curves_docker.findChild(QAbstractItemView)
+        if view and view.model():
+            model = view.model()
+            selection_model = view.selectionModel()
+            selection_model.clearSelection()
+            precise_selection = QItemSelection()
+            total_rows = model.rowCount()
+            
+            for row in range(total_rows):
+                cell_index = model.index(row, current_frame)
+                if cell_index.isValid():
+                    precise_selection.select(cell_index, cell_index)
+            selection_model.select(
+                precise_selection, 
+                selection_model.Select
+            )
+            view.viewport().update()
+        else:
+            raise IndexError("Can't find view for Animation Curves")
 
 pluginInstance = EasyAnimatePlugin(K)
 K.addExtension(pluginInstance)
