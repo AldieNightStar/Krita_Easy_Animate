@@ -46,6 +46,14 @@ class EasyAnimatePlugin(Extension):
         transfrom.setVisible(not transfrom.visible())
         doc.refreshProjection()
 
+    def copy_frames(self):
+        doc = K.activeDocument()
+        K.action('copy_frames').trigger()
+
+    def paste_frames(self):
+        doc = K.activeDocument()
+        K.action('paste_frames').trigger()
+
     def _getTransLayer(self):
         doc = K.activeDocument()
         layer = doc.activeNode()
@@ -76,14 +84,6 @@ class EasyAnimatePlugin(Extension):
 
     def _newAction(self, win, name, desc, act):
         action = win.createAction(name, desc, "tools/scripts")
-
-    def copy_frames(self):
-        doc = K.activeDocument()
-        K.action('copy_frames').trigger()
-
-    def paste_frames(self):
-        doc = K.activeDocument()
-        K.action('paste_frames').trigger()
 
 pluginInstance = EasyAnimatePlugin(K)
 K.addExtension(pluginInstance)
