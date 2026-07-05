@@ -1,6 +1,6 @@
 from krita import *
 from .plugin import pluginInstance
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton
 
 K = Krita.instance()
 
@@ -11,25 +11,38 @@ class AnimationHelperDocker(DockWidget):
         
         # Create the main widget and layout
         self._main_widget = QWidget(self)
-        self._layout = QVBoxLayout(self._main_widget)
+        vbox = QVBoxLayout(self._main_widget)
+        hbox1 = QHBoxLayout(self._main_widget)
+        hbox2 = QHBoxLayout(self._main_widget)
         
         # Create Quick Buttons
-        self._button("⚒️ Select Transform", pluginInstance.trans_select)
-        self._button("✨ Transform Visible", pluginInstance.trans_visible_toggle)
-        self._button("🧾 Transform Key", pluginInstance.trans_new_frame)
-        self._button("❌ Remove Transform Key", pluginInstance.trans_rem_frame)
-        self._button("📚 Copy Frames", pluginInstance.copy_frames)
-        self._button("📚 Paste Frames", pluginInstance.paste_frames)
+        self._button(vbox, "⚒️ Select Transform", pluginInstance.trans_select)
+        self._button(vbox, "✨ Transform Visible", pluginInstance.trans_visible_toggle)
 
-        self._layout.addStretch() # Pushes buttons to the top
+        # Add hbox panel
+        self._button(hbox1, "♦️", pluginInstance.trans_new_frame)
+        self._button(hbox1, "❌", pluginInstance.trans_rem_frame)
+        self._button(hbox1, "📚", pluginInstance.copy_frames)
+        self._button(hbox1, "📋", pluginInstance.paste_frames)
+
+        self._button(hbox2, "📈const", pluginInstance.create_interpol('interpolation_constant'))
+        self._button(hbox2, "📈lin", pluginInstance.create_interpol('interpolation_linear'))
+        self._button(hbox2, "📈bez", pluginInstance.create_interpol('interpolation_bezier'))
+
+        vbox.addLayout(hbox1)
+        vbox.addLayout(hbox2)
+
+        hbox1.addStretch()
+        hbox2.addStretch()
+        vbox.addStretch()
         self.setWidget(self._main_widget)
         
     # Required by Krita
     def canvasChanged(self, canvas):
         pass
 
-    def _button(self, name, act):
+    def _button(self, parent, name, act):
         b = QPushButton(name, self._main_widget)
         b.clicked.connect(act)
-        self._layout.addWidget(b)
+        parent.addWidget(b)
         return b

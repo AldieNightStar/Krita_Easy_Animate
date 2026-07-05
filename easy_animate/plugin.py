@@ -25,7 +25,7 @@ class EasyAnimatePlugin(Extension):
     def trans_rem_frame(self):
         doc = K.activeDocument()
         transform = self._getOrCreateTransLayer()
-        if transform is None: raise KeyError("None of transform")
+        if transform is None: return
 
         oldActive = doc.activeNode()
         doc.setActiveNode(transform)
@@ -53,6 +53,13 @@ class EasyAnimatePlugin(Extension):
     def paste_frames(self):
         doc = K.activeDocument()
         K.action('paste_frames').trigger()
+
+    def create_interpol(self, name):
+        def _method():
+            doc = K.activeDocument()
+            K.action(name).trigger()
+            doc.refreshProjection()
+        return _method
 
     def _getTransLayer(self):
         doc = K.activeDocument()
