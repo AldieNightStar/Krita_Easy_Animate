@@ -17,23 +17,13 @@ class EasyAnimatePlugin(Extension):
 
     def trans_new_frame(self):
         doc = K.activeDocument()
-        transform = self._getOrCreateTransLayer()
-
-        oldActive = doc.activeNode()
-        doc.setActiveNode(transform)
         K.action('add_scalar_keyframes').trigger()
-        doc.setActiveNode(oldActive)
+        doc.refreshProjection()
         
     def trans_rem_frame(self):
         doc = K.activeDocument()
-        transform = self._getOrCreateTransLayer()
-        if transform is None: return
-
-        oldActive = doc.activeNode()
-        doc.setActiveNode(transform)
         K.action('remove_scalar_keyframe').trigger()
         K.action('remove_frames').trigger()
-        doc.setActiveNode(oldActive)
         doc.refreshProjection()
 
     def trans_select(self):
