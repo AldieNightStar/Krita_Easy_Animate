@@ -18,6 +18,8 @@ class AnimationHelperDocker(DockWidget):
         self._button("✨ Transform Visible", pluginInstance.trans_visible_toggle)
         self._button("🧾 Transform Key", pluginInstance.trans_new_frame)
         self._button("❌ Remove Transform Key", pluginInstance.trans_rem_frame)
+        self._button("📚 Copy Frames", pluginInstance.copy_frames)
+        self._button("📚 Paste Frames", pluginInstance.paste_frames)
 
         self._layout.addStretch() # Pushes buttons to the top
         self.setWidget(self._main_widget)
