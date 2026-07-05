@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=easy_animate
+X-Python-2-Compatible=false
+Name=Easy Animate
+Comment=Adds easier ways to animate stuff
